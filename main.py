@@ -15,7 +15,6 @@ old_root = dom.getroot()
 srcLang = old_root.attrib['srcLang']
 trgLang = old_root.attrib['trgLang']
 
-# print etree.tostring(old_root)  print whole file
 tags =[]
 
 for c in old_root:
@@ -26,11 +25,6 @@ for c in old_root:
         original = c.attrib['original']
     except KeyError:
         original = ""
-
-
-    #print (c.tag, c.attrib)
-
-
 
 root = Element('xliff')
 tree = ElementTree(root)
@@ -54,16 +48,12 @@ cont = dict() # container for translation units
 for part in old_root: # go throw whole xml
     for unit in part: #find unit
         if unit.tag.endswith('unit'):  #find <unit>
-           #trans_unit.set('id',unit.attrib['id'])  # create trans unit in new file
-           #cont.append(unit.attrib['id'])  # add value in container
-           #print unit.attrib['id']
-
            for segment in unit: # find segment
                cont[unit.attrib['id']]=[]
                for element in segment:  #find source and target
-
                    if element.tag.endswith('source'):
                        cont[(unit.attrib['id'])].append(element.text)
+
                    if element.tag.endswith('target'):
                        cont[(unit.attrib['id'])].append(element.text)
 
@@ -85,10 +75,7 @@ for x in cont:
     target.set('xml:lang',trgLang)
     target.text = cont[x][1]
 
-        #print (element.tag, "::", element.attrib)
 
-        #print element.attrib['id']
-#print etree.tostring(root)
 
 
 tree.write(open(new_file.encode("UTF-8"), 'w'))
